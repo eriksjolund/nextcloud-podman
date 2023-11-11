@@ -11,7 +11,7 @@ Demo of running nextcloud with rootless podman by using these containers
 
 __status:__ experimental
 
-The `Nextcloud` can be seen when running curl:
+The text `Nextcloud` can be seen when running curl:
 
 ```
 $ curl -s localhost:8080  | grep title
