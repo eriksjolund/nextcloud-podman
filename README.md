@@ -29,10 +29,10 @@ Run nextcloud
 mkdir -p ~/.config/containers/systemd
 mkdir -p ~/.config/systemd/user
 
-podman create network podman2
+podman network create podman2
 
 git clone https://github.com/eriksjolund/nextcloud-docker
-git checkout podman-experiment
+git -C nextcloud-docker checkout podman-experiment
 podman build -t nginx nextcloud-docker/.examples/docker-compose/insecure/mariadb/fpm/web
 
 git clone https://github.com/eriksjolund/nextcloud-podman
@@ -42,6 +42,7 @@ cp nextcloud-podman/mariadb.container ~/.config/containers/systemd
 cp nextcloud-podman/nextcloud.container ~/.config/containers/systemd
 cp nextcloud-podman/nginx.container ~/.config/containers/systemd
 cp nextcloud-podman/nginx.socket ~/.config/systemd/user
+cp nextcloud-podman/redis.service ~/.config/systemd/user
 
 # create data directory that will be bind-mounted by the mariadb container
 mkdir ~/mariadb_data
@@ -50,8 +51,8 @@ mkdir ~/mariadb_data
 mkdir ~/shared_html
 
 systemctl --user daemon-reload
-systemctl enable --now redis.service
-systemctl enable --now mariadb.service
-systemctl enable --now nextcloud.service
-systemctl enable --now nginx.socket
+systemctl --user start redis.service
+systemctl --user start mariadb.service
+systemctl --user start nextcloud.service
+systemctl --user start nginx.socket
 ```
