@@ -7,7 +7,7 @@ Demo of running nextcloud with rootless podman by using these containers
 | docker.io/library/mariadb:latest | |
 | docker.io/library/redis:latest | |
 | localhost/nginx | built from https://github.com/eriksjolund/nextcloud-docker/tree/podman-experiment/.examples/docker-compose/insecure/mariadb/fpm/web |
-| localhost/nextcloud | built from [Docker.nextcloud](Dockerfile.nextcloud) (based on docker.io/library/nextcloud:fpm) |
+| localhost/nextcloud | built from [Dockerfile.nextcloud](Dockerfile.nextcloud) (based on docker.io/library/nextcloud:fpm) |
 
 __status:__ experimental
 
