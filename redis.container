@@ -1,0 +1,13 @@
+[Unit]
+Description=redis service
+Requires=nginx.socket
+After=nginx.socket
+
+[Container]
+ContainerName=redis
+Image=docker.io/library/redis:latest
+Exec=--requirepass iugwilsfjkljsdf
+Network=podman2
+PodmanArgs=--userns=keep-id:uid=999,gid=999
+[Install]
+WantedBy=default.target

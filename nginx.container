@@ -1,0 +1,18 @@
+[Unit]
+Description=Example proxy service
+Requires=nginx.socket nextcloud.service
+After=nginx.socket nextcloud.service
+
+AssertPathIsDirectory=%h/shared_html
+
+[Container]
+Image=localhost/nginx
+
+Environment=NGINX=3;
+Network=podman2
+
+#PodmanArgs=--userns keep-id:uid=101,gid=0
+
+Volume=%h/shared_html:/var/www/html:z,ro
+[Install]
+WantedBy=default.target

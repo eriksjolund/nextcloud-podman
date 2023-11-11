@@ -1,0 +1,24 @@
+[Unit]
+Description=nextcloud service
+Requires=nginx.socket
+After=nginx.socket
+
+AssertPathIsDirectory=%h/shared_html
+
+# [Service]
+# ExecStartPre=mkdir -p %h/shared_html
+[Container]
+ContainerName=app
+Image=localhost/nextcloud
+Network=podman2
+Volume=%h/php/www.conf:/usr/local/etc/php-fpm.d/www.conf:Z
+Volume=%h/shared_html:/var/www/html:z
+PodmanArgs=--userns=keep-id:uid=33,gid=33
+Environment=REDIS_HOST=redis
+Environment=REDIS_PASSWORD=iugwilsfjkljsdf
+Environment=MYSQL_PASSWORD=cR7alS81nalTwp4ap
+Environment=MYSQL_DATABASE=NextcloudDB
+Environment=MYSQL_USER=nextcloudDbUser
+Environment=MYSQL_HOST=mariadb
+[Install]
+WantedBy=default.target
