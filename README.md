@@ -41,8 +41,8 @@ podman build -t nextcloud -f nextcloud-podman/Dockerfile.nextcloud nextcloud-pod
 cp nextcloud-podman/mariadb.container ~/.config/containers/systemd
 cp nextcloud-podman/nextcloud.container ~/.config/containers/systemd
 cp nextcloud-podman/nginx.container ~/.config/containers/systemd
+cp nextcloud-podman/redis.service ~/.config/containers/systemd
 cp nextcloud-podman/nginx.socket ~/.config/systemd/user
-cp nextcloud-podman/redis.service ~/.config/systemd/user
 
 # create data directory that will be bind-mounted by the mariadb container
 mkdir ~/mariadb_data
