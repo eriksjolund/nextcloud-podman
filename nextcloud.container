@@ -14,7 +14,7 @@ Network=podman2
 Volume=%h/shared_html:/var/www/html:z
 PodmanArgs=--userns=keep-id:uid=33,gid=33
 Environment=REDIS_HOST=redis
-Environment=REDIS_PASSWORD=iugwilsfjkljsdf
+Environment=REDIS_HOST_PASSWORD=iugwilsfjkljsdf
 Environment=MYSQL_PASSWORD=cR7alS81nalTwp4ap
 Environment=MYSQL_DATABASE=NextcloudDB
 Environment=MYSQL_USER=nextcloudDbUser
