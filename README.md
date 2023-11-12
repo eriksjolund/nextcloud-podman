@@ -33,6 +33,17 @@ Test
    630M	/var/home/test/shared_html
    $
    ```
+10. check if all files and directories under _~/mariadb_data_ and _~/shared_html_ are owned by the regular user on the host
+    ```
+    $ uid=$(id -u)
+    $ gid=$(id -g)
+    $ find mariadb_data -not -user $uid
+    $ find mariadb_data -not -group $gid
+    $ find shared_html -not -user $uid
+    $ find shared_html -not -group $gid
+    $
+    ```
+    __result__: yes
 
 ## Installation
 
