@@ -25,7 +25,7 @@ Test
 6. wait until the nextcloud web interface is shown. (Possibly reloading the webpage is required?). This step might take about 5 minutes.
 7. fill in a username and a password in the _create admin account_ web form.
 8. log in with the username and password.
-9. check disk consumption in the bind-mounted directories
+9. check disk consumption in the bind-mounted directories _~/mariadb_data_ and _~/shared_html_
    ```
    $ podman unshare du -sh ~/mariadb_data
    190M	/var/home/test/mariadb_data
