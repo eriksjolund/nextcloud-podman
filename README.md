@@ -37,10 +37,10 @@ Test
     ```
     $ uid=$(id -u)
     $ gid=$(id -g)
-    $ find mariadb_data -not -user $uid
-    $ find mariadb_data -not -group $gid
-    $ find shared_html -not -user $uid
-    $ find shared_html -not -group $gid
+    $ find ~/mariadb_data -not -user $uid
+    $ find ~/mariadb_data -not -group $gid
+    $ find ~/shared_html -not -user $uid
+    $ find ~/shared_html -not -group $gid
     $
     ```
     __result__: yes
