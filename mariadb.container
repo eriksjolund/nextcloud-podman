@@ -13,7 +13,7 @@ Image=docker.io/library/mariadb:latest
 Exec=--transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
 Network=podman2
 Volume=%h/mariadb_data:/var/lib/mysql:Z
-PodmanArgs=--userns=keep-id:uid=999,gid=999
+PodmanArgs=--userns=keep-id:uid=999,gid=999 --network-alias=mariadb
 Environment=MARIADB_ROOT_PASSWORD=inR3klpD3eWuEa0
 Environment=MARIADB_PASSWORD=cR7alS81nalTwp4ap
 Environment=MARIADB_DATABASE=NextcloudDB

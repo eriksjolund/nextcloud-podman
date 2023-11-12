@@ -8,6 +8,6 @@ ContainerName=redis
 Image=docker.io/library/redis:latest
 Exec=--requirepass iugwilsfjkljsdf
 Network=podman2
-PodmanArgs=--userns=keep-id:uid=999,gid=999
+PodmanArgs=--userns=keep-id:uid=999,gid=999 --network-alias redis
 [Install]
 WantedBy=default.target
