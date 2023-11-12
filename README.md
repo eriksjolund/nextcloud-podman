@@ -11,15 +11,28 @@ Demo of running nextcloud with rootless podman by using these containers
 
 __status:__ experimental
 
-The text `Nextcloud` can be seen when running curl:
-
-```
-$ curl -s localhost:8080  | grep title
-		<title>
-			Nextcloud		</title>
-```
-
 Tested with podman 4.7.0.
+
+A minimal test to see that it's possible to log in worked.
+
+Test
+
+1. `systemctl --user start mariadb.service`
+2. `systemctl --user start redis.service`
+3. `systemctl --user start nextcloud.service`
+4. `systemctl --user start nginx.socket`
+5. browse to http://localhost:8080
+6. wait until the nextcloud web interface is shown. (Possibly reloading the webpage is required?). This step might take about 5 minutes.
+7. fill in a username and a password in the _create admin account_ web form.
+8. log in with the username and password.
+9. check disk consumption in the bind-mounted directories
+   ```
+   $ podman unshare du -sh ~/mariadb_data
+   190M	/var/home/test/mariadb_data
+   $ podman unshare du -sh ~/shared_html
+   630M	/var/home/test/shared_html
+   $
+   ```
 
 ## Installation
 
