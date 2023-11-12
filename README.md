@@ -80,3 +80,12 @@ systemctl --user start mariadb.service
 systemctl --user start nextcloud.service
 systemctl --user start nginx.socket
 ```
+
+### References
+
+https://github.com/eriksjolund/podman-nginx-socket-activation
+nginx + podman + socket activation
+
+https://github.com/containers/podman/discussions/20519
+This project was created to see if it is possible to run nextcloud in multiple containers (nextcloud, mariadb, redis, nginx) with rootless podman and at the same
+time only create files and directories that are owned by the regular user on the host. See the discussion for the starting point of the idea.
