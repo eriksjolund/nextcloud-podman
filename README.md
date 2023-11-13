@@ -13,9 +13,7 @@ __status:__ experimental
 
 Tested with podman 4.7.0.
 
-A minimal test to see that it's possible to log in worked.
-
-Test
+A minimal test to see that it's possible to log in worked:
 
 1. `systemctl --user start mariadb.service`
 2. `systemctl --user start redis.service`
@@ -43,11 +41,9 @@ Test
     $ find ~/shared_html -not -group $gid
     $
     ```
-    __result__: yes
+    __result__: yes, files are owned by the regular user on the host
 
 ## Installation
-
-Run nextcloud
 
 ```
 mkdir -p ~/.config/containers/systemd
@@ -84,7 +80,10 @@ systemctl --user start nginx.socket
 ### References
 
 https://github.com/eriksjolund/podman-nginx-socket-activation
-nginx + podman + socket activation
+about: nginx, podman, socket activation
+
+https://github.com/eriksjolund/podman-detect-option
+about: `--userns keep-id:uid=$uid,gid=$gid`
 
 https://github.com/containers/podman/discussions/20519
 This project was created to see if it is possible to run nextcloud in multiple containers (nextcloud, mariadb, redis, nginx) with rootless podman and at the same
