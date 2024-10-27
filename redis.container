@@ -7,7 +7,8 @@ After=nginx.socket
 ContainerName=redis
 Image=docker.io/library/redis:latest
 Exec=--requirepass iugwilsfjkljsdf
-Network=podman2
-PodmanArgs=--userns=keep-id:uid=999,gid=999 --network-alias redis
+Network=mynet.network
+UserNS=keep-id:uid=999,gid=999
+
 [Install]
 WantedBy=default.target

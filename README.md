@@ -2,80 +2,57 @@
 
 Demo of running nextcloud with rootless podman by using these containers
 
-| image | comment |
-| --    | --      |
-| docker.io/library/mariadb:latest | |
-| docker.io/library/redis:latest | |
-| localhost/nginx | built from https://github.com/eriksjolund/nextcloud-docker/tree/podman-experiment/.examples/docker-compose/insecure/mariadb/fpm/web |
-| localhost/nextcloud | built from [Dockerfile.nextcloud](Dockerfile.nextcloud) (based on docker.io/library/nextcloud:fpm) |
+| image |
+| --    |
+| docker.io/library/mariadb:latest |
+| docker.io/library/redis:latest |
+| docker.io/library/nginx:alpine |
+| docker.io/library/nextcloud:fpm |
+
+Data is stored in bind mounted volumes under the directory _~/nextcloud-data_.
+All files and directories have the ownership of the regular user on the host.
+No pods are used. All containers are running in a custom network.
+Nginx is configured to use [_socket activation_](https://github.com/eriksjolund/podman-nginx-socket-activation/).
 
 __status:__ experimental
 
-Tested with podman 4.7.0.
+> [!WARNING]
+> This guide configures nginx to use HTTP.
+> HTTP requests and responses are sent in plaintext to the web browser.
+> This is insecure. For real production use cases, you need to configure nginx to use HTTPS.
+
+Tested with podman 5.3.0-RC1
 
 A minimal test to see that it's possible to log in worked:
 
-1. `systemctl --user start mariadb.service`
-2. `systemctl --user start redis.service`
-3. `systemctl --user start nextcloud.service`
-4. `systemctl --user start nginx.socket`
-5. browse to http://localhost:8080
-6. wait until the nextcloud web interface is shown. (Possibly reloading the webpage is required?). This step might take about 5 minutes.
-7. fill in a username and a password in the _create admin account_ web form.
-8. log in with the username and password.
-9. check disk consumption in the bind-mounted directories _~/mariadb_data_ and _~/shared_html_
+1. `sudo useradd test`
+1. `sudo machinectl shell --uid=test`
+1. `git clone https://github.com/eriksjolund/nextcloud-podman.git`
+1. `cd nextcloud-podman`
+1. Run command
    ```
-   $ podman unshare du -sh ~/mariadb_data
-   190M	/var/home/test/mariadb_data
-   $ podman unshare du -sh ~/shared_html
-   630M	/var/home/test/shared_html
+   bash install.sh 8080
+   ```
+   The number chosen specifies the port.
+   The command might take a few minutes before it returns because pulling _docker.io/library/nextcloud:fpm_
+   can take a while.
+1. In a web browser go to http://localhost:8080
+1. Wait until the nextcloud web interface is shown. (Possibly reloading the webpage is required?). This step might take about 5 minutes.
+1. Fill in a username and a password in the _create admin account_ web form.
+1. Log in with the username and password.
+1. Check disk consumption in the bind-mounted directories _~/nextcloud-data_
+   ```
+   $ podman unshare du -sh ~/nextcloud-data/
+   883M	/var/home/test/nextcloud-data/
    $
    ```
-10. check if all files and directories under _~/mariadb_data_ and _~/shared_html_ are owned by the regular user on the host
+1. Verify that all files and directories under _~/nextcloud-data_ are owned by the regular user on the host
     ```
-    $ uid=$(id -u)
-    $ gid=$(id -g)
-    $ find ~/mariadb_data -not -user $uid
-    $ find ~/mariadb_data -not -group $gid
-    $ find ~/shared_html -not -user $uid
-    $ find ~/shared_html -not -group $gid
+    $ podman unshare find ~/nextcloud-data -not -user 0
+    $ podman unshare find ~/nextcloud-data -not -group 0
     $
     ```
-    __result__: yes, files are owned by the regular user on the host
-
-## Installation
-
-```
-mkdir -p ~/.config/containers/systemd
-mkdir -p ~/.config/systemd/user
-
-podman network create podman2
-
-git clone https://github.com/eriksjolund/nextcloud-docker
-git -C nextcloud-docker checkout podman-experiment
-podman build -t nginx nextcloud-docker/.examples/docker-compose/insecure/mariadb/fpm/web
-
-git clone https://github.com/eriksjolund/nextcloud-podman
-podman build -t nextcloud -f nextcloud-podman/Dockerfile.nextcloud nextcloud-podman
-
-cp nextcloud-podman/mariadb.container ~/.config/containers/systemd
-cp nextcloud-podman/nextcloud.container ~/.config/containers/systemd
-cp nextcloud-podman/nginx.container ~/.config/containers/systemd
-cp nextcloud-podman/redis.service ~/.config/containers/systemd
-cp nextcloud-podman/nginx.socket ~/.config/systemd/user
-
-# create data directory that will be bind-mounted by the mariadb container
-mkdir ~/mariadb_data
-
-# create data directory that will be bind-mounted by the nginx container and the nextcloud container
-mkdir ~/shared_html
-
-systemctl --user daemon-reload
-systemctl --user start redis.service
-systemctl --user start mariadb.service
-systemctl --user start nextcloud.service
-systemctl --user start nginx.socket
-```
+    __result__: yes, all files and directories under _~/nextcloud-data_ are owned by the regular user on the host
 
 ### References
 

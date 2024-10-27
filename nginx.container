@@ -3,16 +3,19 @@ Description=Example proxy service
 Requires=nginx.socket nextcloud.service
 After=nginx.socket nextcloud.service
 
-AssertPathIsDirectory=%h/shared_html
+AssertPathIsDirectory=%h/nextcloud-data/shared_html
+AssertPathExists=%h/nextcloud-data/nginx.conf
 
 [Container]
-Image=localhost/nginx
+Image=docker.io/library/nginx:alpine
 
 Environment=NGINX=3;
-Network=podman2
+Network=mynet.network
 
 #PodmanArgs=--userns keep-id:uid=101,gid=0
 
-Volume=%h/shared_html:/var/www/html:z,ro
+Volume=%h/nextcloud-data/shared_html:/var/www/html:z,ro
+Volume=%h/nextcloud-data/nginx.conf:/etc/nginx/nginx.conf:Z,ro
+
 [Install]
 WantedBy=default.target

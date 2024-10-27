@@ -1,18 +1,26 @@
+[Service]
+
+# Pulling the nextcloud container image can take a long time.
+# Extend the timeout to 600 seconds
+
+TimeoutStartSec=600
+
 [Unit]
 Description=nextcloud service
 Requires=nginx.socket
 After=nginx.socket
 
-AssertPathIsDirectory=%h/shared_html
+AssertPathIsDirectory=%h/nextcloud-data
+AssertPathIsDirectory=%h/nextcloud-data/shared_html
+AssertPathExists=%h/nextcloud-data/redis-session.ini
 
-# [Service]
-# ExecStartPre=mkdir -p %h/shared_html
 [Container]
 ContainerName=app
-Image=localhost/nextcloud
-Network=podman2
-Volume=%h/shared_html:/var/www/html:z
-PodmanArgs=--userns=keep-id:uid=33,gid=33
+Image=docker.io/library/nextcloud:fpm
+Network=mynet.network
+Volume=%h/nextcloud-data/shared_html:/var/www/html:z
+Volume=%h/nextcloud-data/redis-session.ini:/usr/local/etc/php/conf.d/redis-session.ini:z
+UserNS=keep-id:uid=33,gid=33
 Environment=REDIS_HOST=redis
 Environment=REDIS_HOST_PASSWORD=iugwilsfjkljsdf
 Environment=MYSQL_PASSWORD=cR7alS81nalTwp4ap
