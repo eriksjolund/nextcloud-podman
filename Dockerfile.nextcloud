@@ -1,2 +1,0 @@
-FROM docker.io/library/nextcloud:fpm
-RUN chmod 777 /usr/local/etc/php/conf.d/
